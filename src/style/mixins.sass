@@ -1,0 +1,14 @@
+=colorTheme($property, $lightValue, $darkValue)
+  #{$property}: $lightValue
+
+  @media (prefers-color-scheme: light)
+    #{$property}: $lightValue
+
+  @media (prefers-color-scheme: dark)
+    #{$property}: $darkValue
+
+=color($lightColor, $darkColor)
+  +colorTheme(color, $lightColor, $darkColor)
+
+=backgroundColor($lightColor, $darkColor)
+  +colorTheme(background-color, $lightColor, $darkColor)
