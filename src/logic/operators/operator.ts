@@ -29,20 +29,18 @@ export default class Operator {
     this.calc = calc;
 
     if (!view) {
-      if (oneArgument) {
-        this.view = (v1) => v1;
-      } else if (token) {
-        const isTokenArray = Array.isArray(token);
+      const isTokenArray = Array.isArray(token);
 
-        if (isTokenArray && !token.length)
-          throw new Error('View is required for twoArgument operators without token');
+      if (isTokenArray && !token.length)
+        throw new Error('View is required for twoArgument operators without token');
 
-        const tokenValue = isTokenArray
-          ? token[0]
-          : token;
+      const tokenValue = isTokenArray
+        ? token[0]
+        : token;
 
-        this.view = (v1, v2) => `${v1} ${tokenValue} ${v2}`;
-      }
+      this.view = oneArgument
+        ? (v1) => `${v1}${tokenValue}`
+        : (v1, v2) => `${v1} ${tokenValue} ${v2}`;
     } else {
       this.view = view;
     }

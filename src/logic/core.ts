@@ -121,7 +121,7 @@ export class Calculator {
     return match;
   }
 
-  compile(calcString: string): CompiledOperator {
+  compile(calcString: string = ''): CompiledOperator {
     const isBracketsValid = Calculator.validateBrackets(calcString);
 
     if (!isBracketsValid) throw new Error('Invalid brackets');
@@ -162,7 +162,7 @@ export class Calculator {
     return realResult;
   }
 
-  calc(calcString: string): number {
+  calc(calcString: string = ''): number {
     const compiled = this.compile(calcString);
 
     return compiled.exec();

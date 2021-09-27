@@ -58,12 +58,20 @@ describe('Operator class', () => {
         expect(instance.view).toEqual(options.view);
       });
 
-      it('Default view for oneArgument', () => {
+      it('Default view for oneArgument simple token', () => {
         const options = { token: 'foo', calc: () => 5, oneArgument: true };
         const instance = new Operator(options);
         const uniqString = 'fhgawr3yafnselif7328roewf';
 
-        expect(instance.view(uniqString)).toEqual(uniqString);
+        expect(instance.view(uniqString)).toEqual(`${uniqString}${options.token}`);
+      });
+
+      it('Default view for oneArgument simple token', () => {
+        const options = { token: ['bar', 'foo'], calc: () => 5, oneArgument: true };
+        const instance = new Operator(options);
+        const uniqString = 'sfdbfdjfskeb';
+
+        expect(instance.view(uniqString)).toEqual(`${uniqString}${options.token[0]}`);
       });
 
       it('Default view for simple token', () => {

@@ -48,8 +48,6 @@ export default class CompiledOperator {
       const isNeedBrackets = this.v2.operator.priority < this.operator.priority;
       const view = this.v2.view(depth - 1);
 
-      // debugger;
-
       return isNeedBrackets && depth > 1
         ? `(${view})`
         : view;
