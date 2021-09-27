@@ -3,26 +3,15 @@ import MinusOperator from './minus';
 describe('Minus operator', () => {
   describe('Calc', () => {
     it('Calculate positive values', () => {
-      const testCases = [
-        {
-          args: [5, 2],
-          res: 3,
-        },
-        {
-          args: [10, 6],
-          res: 4,
-        },
-        {
-          args: [1009, 9],
-          res: 1000,
-        },
-      ];
+      expect(MinusOperator.calc(1, 3)).toEqual(-2);
+      expect(MinusOperator.calc(1000, 5)).toEqual(995);
+      expect(MinusOperator.calc(2, 2)).toEqual(0);
+    });
 
-      testCases.forEach(({ args, res }) => {
-        const realRes = MinusOperator.calc(args[0], args[1]);
-
-        expect(realRes).toEqual(res);
-      });
+    it('Calculate negative values', () => {
+      expect(MinusOperator.calc(1, -3)).toEqual(4);
+      expect(MinusOperator.calc(1000, -5)).toEqual(1005);
+      expect(MinusOperator.calc(-5, 2)).toEqual(-7);
     });
   });
 });

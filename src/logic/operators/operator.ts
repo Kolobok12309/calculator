@@ -10,11 +10,11 @@ interface OperatorOptions {
 }
 
 export default class Operator {
-  token?: string | string[];
-  priority: number = 0;
-  oneArgument: boolean = true;
-  view: OperatorView = (v1) => v1;
-  calc: OperatorCalc = (v1) => v1;
+  token: string | string[];
+  priority: number;
+  oneArgument: boolean;
+  view: OperatorView;
+  calc: OperatorCalc;
 
   constructor({
     token,
@@ -42,8 +42,6 @@ export default class Operator {
           : token;
 
         this.view = (v1, v2) => `${v1} ${tokenValue} ${v2}`;
-      } else {
-        throw new Error('View is required for twoArgument operators without token');
       }
     } else {
       this.view = view;

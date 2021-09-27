@@ -2,27 +2,28 @@ import EmptyOperator from './empty';
 
 describe('Empty operator', () => {
   describe('Calc', () => {
-    it('Calculate positive values', () => {
-      const testCases = [
-        {
-          args: [5, 2],
-          res: 5,
-        },
-        {
-          args: [Infinity, 6],
-          res: Infinity,
-        },
-        {
-          args: [-10],
-          res: -10,
-        },
-      ];
+    it('Calculate any values', () => {
+      const randomValue = Math.random() * 100 + 10;
+      expect(EmptyOperator.calc(randomValue, 3)).toEqual(randomValue);
+      expect(EmptyOperator.calc(1, 3)).toEqual(1);
+      expect(EmptyOperator.calc(1000, 5)).toEqual(1000);
+      expect(EmptyOperator.calc(undefined, 2)).toEqual(undefined);
+      expect(EmptyOperator.calc(1, -3)).toEqual(1);
+      expect(EmptyOperator.calc(null, -5)).toEqual(null);
+      expect(EmptyOperator.calc(-5, 2)).toEqual(-5);
+    });
+  });
 
-      testCases.forEach(({ args, res }) => {
-        const realRes = EmptyOperator.calc(args[0], args[1]);
-
-        expect(realRes).toEqual(res);
-      });
+  describe('View', () => {
+    it('View any values', () => {
+      const randomValue = Math.random() * 100 + 10;
+      expect(EmptyOperator.calc(randomValue, 3)).toEqual(randomValue);
+      expect(EmptyOperator.calc(1, 3)).toEqual(1);
+      expect(EmptyOperator.calc(1000, 5)).toEqual(1000);
+      expect(EmptyOperator.calc(undefined, 2)).toEqual(undefined);
+      expect(EmptyOperator.calc(1, -3)).toEqual(1);
+      expect(EmptyOperator.calc(null, -5)).toEqual(null);
+      expect(EmptyOperator.calc(-5, 2)).toEqual(-5);
     });
   });
 });
