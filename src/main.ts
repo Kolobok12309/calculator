@@ -1,5 +1,5 @@
 import App from './App.svelte';
-import './logic/core';
+import './logic';
 
 const app = new App({
 	target: document.body,

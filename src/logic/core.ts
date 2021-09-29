@@ -1,11 +1,11 @@
 import type { CalculatorOptions, ParseResult, OperatorResult } from './interfaces';
-import { OPEN_BRACKET, CLOSE_BRACKET, PRIORITY_BRACKET } from './consts';
+import { OPEN_BRACKET, CLOSE_BRACKET, PRIORITY_BRACKET, MINUS_TOKEN, PLUS_TOKEN } from './consts';
 import { Operator, EmptyOperator, defaultOperators, MulOperator } from './operators';
 import CompiledOperator from './compiled-operator';
-import { escapeRegexp } from './utils';
+import { escapeRegexp, getRegexpExecArray } from './utils';
 
 export class Calculator {
-  operators: Operator[];
+  private operators: Operator[];
 
   constructor({
     operators = defaultOperators,
@@ -13,11 +13,11 @@ export class Calculator {
     this.operators = operators;
   }
 
-  static numberRegexpString = '(?:[-+])?\\d+(?:[,.]\\d+)?';
+  static numberRegexpString = `(?:[${MINUS_TOKEN}${PLUS_TOKEN}])?\\d+(?:[,.]\\d+)?`;
   static bracketsRegexpString = `[${OPEN_BRACKET}${CLOSE_BRACKET}]`;
 
-  static getMatchRegex(operators: Operator[] = []): RegExp {
-    const tokens = operators
+  getMatchRegex(): RegExp {
+    const tokens = this.operators
       .reduce((acc, { token }) => acc.concat(token), []);
     const escapedTokens = tokens.map(escapeRegexp);
     const joinedOperatorRegexString = escapedTokens.join('|');
@@ -68,15 +68,16 @@ export class Calculator {
   }
 
   private parseString(calcString: string): ParseResult[] {
-    const matchRegex = Calculator.getMatchRegex(this.operators);
+    const matchRegex = this.getMatchRegex();
+    const matchResult = getRegexpExecArray(matchRegex, calcString);
     const match: ParseResult[] = [];
 
-    let res: RegExpExecArray = null;
-    let prevRes: RegExpExecArray = null;
     let priorityBonus = 0;
 
-    while (res = matchRegex.exec(calcString)) {
-      const { number, bracket, operator } = res.groups;
+    matchResult.forEach(({ groups }, index) => {
+      const { number, bracket, operator } = groups;
+      const prevRes = matchResult[index - 1];
+      const nextRes = matchResult[index + 1];
 
       if (bracket) {
         if (bracket === CLOSE_BRACKET) {
@@ -94,12 +95,23 @@ export class Calculator {
           priorityBonus += PRIORITY_BRACKET;
         }
       } else if (operator) {
-        const foundOperator = this.getOperatorByToken(operator);
+        // Logic for parse expressions like "2+-2" or "2/+2"
+        if (
+          (operator === PLUS_TOKEN || operator === MINUS_TOKEN)
+          && (!prevRes || (
+            prevRes && prevRes.groups.operator
+            && nextRes && nextRes.groups.number
+          ))
+        ) {
+          nextRes.groups.number = `${operator}${nextRes.groups.number}`;
+        } else {
+          const foundOperator = this.getOperatorByToken(operator);
 
-        match.push({
-          operator: foundOperator,
-          priority: priorityBonus + foundOperator.priority,
-        });
+          match.push({
+            operator: foundOperator,
+            priority: priorityBonus + foundOperator.priority,
+          });
+        }
       } else if (number) {
         const { groups: { bracket = null } = {} } = prevRes || {};
 
@@ -114,9 +126,7 @@ export class Calculator {
 
         match.push(parseFloat(number.replace(',', '.')));
       }
-
-      prevRes = res;
-    }
+    });
 
     return match;
   }
@@ -140,10 +150,30 @@ export class Calculator {
 
         const v1 = results[index - 1];
 
+        if (
+          v1
+          && typeof (v1 as unknown as ParseResult) !== 'number'
+          && !(v1 instanceof CompiledOperator)
+        ) {
+          const { operator: { token } } = v1 as unknown as OperatorResult;
+
+          throw new Error(`Two operators in a row 1:"${token}", 2:"${operator.token}"`);
+        }
+
         if (operator.oneArgument) {
           results.splice(index - 1, 2, new CompiledOperator(operator, v1));
         } else {
           const v2 = results[index + 1];
+
+          if (
+            v2
+            && typeof (v2 as unknown as ParseResult) !== 'number'
+            && !(v2 instanceof CompiledOperator)
+          ) {
+            const { operator: { token } } = v2 as unknown as OperatorResult;
+
+            throw new Error(`Two operators in a row 1:"${operator.token}", 2:"${token}"`);
+          }
 
           results.splice(index - 1, 3, new CompiledOperator(operator, v1, v2));
         }
@@ -167,6 +197,3 @@ export class Calculator {
     return compiled.exec();
   }
 };
-
-(window as any).Calculator = Calculator;
-(window as any).calc = new Calculator();

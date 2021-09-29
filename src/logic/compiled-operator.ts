@@ -16,11 +16,7 @@ export default class CompiledOperator {
     this.v2 = v2;
 
     if (!operator.oneArgument && v2 === undefined) {
-      const tokenValue = Array.isArray(operator.token)
-        ? operator.token[0]
-        : operator.token;
-
-      throw new Error(`Operator "${tokenValue}" require two arguments`);
+      throw new Error(`Operator "${operator.token}" require two arguments`);
     }
   }
 

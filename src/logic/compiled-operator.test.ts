@@ -4,9 +4,19 @@ import CompiledOperator from './compiled-operator';
 describe('CompiledOperator', () => {
   describe('Constructor', () => {
     it('Throw error for oneArgument operator while not set v2', () => {
+      const errorMsg = 'require two arguments';
+
       expect(() => {
         new CompiledOperator(PlusOperator, 0);
-      }).toThrow('require two arguments');
+      }).toThrow(errorMsg);
+      expect(() => {
+        const operator = new Operator({
+          token: ['+', '-', '^^'],
+          calc: (v1, v2) => v1 + v2,
+        });
+
+        new CompiledOperator(operator, 0);
+      }).toThrow(errorMsg);
     });
   });
 
