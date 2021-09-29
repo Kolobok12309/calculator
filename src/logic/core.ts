@@ -24,16 +24,16 @@ export class Calculator {
 
     const matchers = [
       {
+        matcher: joinedOperatorRegexString,
+        name: 'operator',
+      },
+      {
         matcher: Calculator.numberRegexpString,
         name: 'number',
       },
       {
         matcher: Calculator.bracketsRegexpString,
         name: 'bracket'
-      },
-      {
-        matcher: joinedOperatorRegexString,
-        name: 'operator',
       },
     ];
     const joinedMatcher = matchers
@@ -138,15 +138,14 @@ export class Calculator {
         const index = results
           .indexOf(res as unknown as number | CompiledOperator);
 
-        console.log(priority, operator, index);
         const v1 = results[index - 1];
 
         if (operator.oneArgument) {
-          results.splice(index - 1, 2, new CompiledOperator(operator, priority, v1));
+          results.splice(index - 1, 2, new CompiledOperator(operator, v1));
         } else {
           const v2 = results[index + 1];
 
-          results.splice(index - 1, 3, new CompiledOperator(operator, priority, v1, v2));
+          results.splice(index - 1, 3, new CompiledOperator(operator, v1, v2));
         }
       });
 
@@ -156,7 +155,7 @@ export class Calculator {
     const realResult = results[0];
 
     if (typeof realResult === 'number') {
-      return new CompiledOperator(EmptyOperator, 0, realResult);
+      return new CompiledOperator(EmptyOperator, realResult);
     }
 
     return realResult;

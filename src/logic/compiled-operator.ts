@@ -1,29 +1,43 @@
 import type { Operator } from './operators';
-import { PRIORITY_BRACKET } from './consts';
 
 export default class CompiledOperator {
-  v1: number | CompiledOperator;
-  v2?: number | CompiledOperator;
-  result: number;
-  operator: Operator;
-  priority: number;
+  private v1: number | CompiledOperator;
+  private v2?: number | CompiledOperator;
+  private result: number;
+  private operator: Operator;
 
   constructor(
     operator: Operator,
-    priority: number,
     v1: number | CompiledOperator,
     v2?: number | CompiledOperator,
   ) {
     this.operator = operator;
-    this.priority = priority;
     this.v1 = v1;
     this.v2 = v2;
+
+    if (!operator.oneArgument && v2 === undefined) {
+      const tokenValue = Array.isArray(operator.token)
+        ? operator.token[0]
+        : operator.token;
+
+      throw new Error(`Operator "${tokenValue}" require two arguments`);
+    }
   }
 
-  get bracketLevel() {
-    const bracketPriority = this.priority - this.operator.priority;
+  private getMaxDepth() {
+    const v1Depth = this.v1 instanceof CompiledOperator
+      ? this.v1.getMaxDepth() + 1
+      : 1;
+    const v2Depth = this.v2 instanceof CompiledOperator
+      ? this.v2.getMaxDepth() + 1
+      : 1;
 
-    return bracketPriority / PRIORITY_BRACKET;
+    const depth =  Math.max(
+      v1Depth,
+      v2Depth,
+    );
+
+    return depth;
   }
 
   private getV1View(depth: number = 1) {
@@ -56,8 +70,12 @@ export default class CompiledOperator {
     }
   }
 
-  // TODO Сделать глубину не по вложенности операторов, а по вложенности скобок
   view(depth: number = 1): string {
+    if (depth < 0) {
+      const maxDepth = this.getMaxDepth();
+
+      depth = Math.max(maxDepth + 1 + depth, 0);
+    }
     if (depth === 0) return `${this.exec()}`;
 
     const v1View = this.getV1View(depth);
