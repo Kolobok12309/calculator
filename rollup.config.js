@@ -7,6 +7,8 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import copy from 'rollup-plugin-copy';
+import alias from '@rollup/plugin-alias';
+import path from 'path';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -59,6 +61,11 @@ export default {
 			targets: [
 				{ src: 'public/**/*', dest: 'dist' },
 				{ src: 'node_modules/@fortawesome/fontawesome-free/webfonts/**/*', dest: 'dist/webfonts' },
+			],
+		}),
+		alias({
+			entries: [
+				{ find: '@/', replacement: path.resolve(__dirname, './src') },
 			],
 		}),
 
