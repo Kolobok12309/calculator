@@ -1,6 +1,38 @@
+<script
+	lang="ts"
+	context="module"
+>
+	import { Calculator } from '@/logic';
+	import type CompiledOperator from '@/logic/compiled-operator';
+
+	const calculator = new Calculator();
+</script>
+
 <script lang="ts">
   import Keyboard from './keyboard.svelte';
   import ThemeChanger from './theme-changer.svelte';
+
+  let result: number = 0;
+	let compiled: CompiledOperator = null;
+	let query: string = '';
+
+	const onAddSymbol = ({ detail }) => {
+		query += detail;
+	}
+	const onReset = () => {
+		query = '';
+		result = 0;
+		compiled = null;
+	}
+	const onSubmit = () => {
+		try {
+			compiled = calculator.compile(query);
+			result = compiled.exec();
+			query = compiled.view(-1);
+		} catch (err) {
+			console.error(err);
+		}
+	}
 </script>
 
 <main class="calculator">
@@ -8,10 +40,13 @@
     <ThemeChanger />
   </div>
 
-  <div class="calculator__result">120</div>
+  <div class="calculator__result">
+    {result}
+  </div>
 
   <div class="calculator__query">
-    50
+		{query}
+    <!-- 50
     <span class="calculator__query__operator"> - </span>
     10
     <span class="calculator__query__operator"> - </span>
@@ -19,11 +54,15 @@
     <span class="calculator__query__operator"> - </span>
     10
     <span class="calculator__query__operator"> + </span>
-    100
+    100 -->
   </div>
 
   <div class="calculator__keyboard">
-    <Keyboard />
+    <Keyboard
+			on:add={onAddSymbol}
+			on:reset={onReset}
+			on:submit={onSubmit}
+		/>
   </div>
 </main>
 
