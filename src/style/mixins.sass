@@ -7,10 +7,10 @@
   @media (prefers-color-scheme: dark)
     #{$property}: $darkValue
 
-  .light &
+  :global(.light) &
     #{$property}: $lightValue
 
-  .dark &
+  :global(.dark) &
     #{$property}: $darkValue
 
 =color($lightColor, $darkColor)

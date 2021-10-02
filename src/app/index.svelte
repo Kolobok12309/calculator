@@ -1,23 +1,21 @@
 <script lang="ts">
+  import { colorTheme } from '@/store/color-theme';
+
   import Calculator from './calculator/index.svelte';
-
-  import { ColorTheme, getTheme, setTheme } from './color-theme';
-
-  let colorTheme: ColorTheme = getTheme();
 </script>
 
 <div
   class="container"
-  class:dark={colorTheme === 'dark'}
-  class:light={colorTheme === 'light'}
+  class:dark={$colorTheme === 'dark'}
+  class:light={$colorTheme === 'light'}
 >
-  <Calculator bind:colorTheme />
+  <Calculator />
 </div>
 
 <style lang="sass">
 :global(html,body)
 	height: 100%
-	min-height: 100vw
+	font-family: $font-family
 
 :global(*)
 	box-sizing: border-box
