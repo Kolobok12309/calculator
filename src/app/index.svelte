@@ -16,6 +16,7 @@
 :global(html,body)
 	height: 100%
 	font-family: $font-family
+	touch-action: none
 
 :global(*)
 	box-sizing: border-box

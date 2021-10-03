@@ -6,16 +6,16 @@
   const buttons = [
     { text: 'C', color: 'red', handler: () => dispatch('reset') },
     { text: 'CA', color: 'red', handler: () => dispatch('reset') },
-    { text: 'CA', color: 'red', handler: () => dispatch('reset') },
-    { text: 'CA', color: 'red', handler: () => dispatch('reset') },
-    { text: '(', color: 'accent', handler: () => dispatch('add', ')') },
-    { text: ')', color: 'accent', handler: () => dispatch('add', '(') },
+    { text: '', color: 'red', handler: () => {} },
+    { text: '', color: 'red', handler: () => {} },
+    { text: '(', color: 'accent', handler: () => dispatch('add', '(') },
+    { text: ')', color: 'accent', handler: () => dispatch('add', ')') },
     { text: '!', color: 'accent', handler: () => dispatch('add', '!') },
-    { text: '/', color: 'accent', handler: () => dispatch('add', '/') },
+    { text: '/', color: 'accent', handler: () => dispatch('add', ' / ') },
     { text: '7', color: 'text', handler: () => dispatch('add', '7') },
     { text: '8', color: 'text', handler: () => dispatch('add', '8') },
     { text: '9', color: 'text', handler: () => dispatch('add', '9') },
-    { text: '*', color: 'accent', handler: () => dispatch('add', '*') },
+    { text: '*', color: 'accent', handler: () => dispatch('add', ' * ') },
     { text: '4', color: 'text', handler: () => dispatch('add', '4') },
     { text: '5', color: 'text', handler: () => dispatch('add', '5') },
     { text: '6', color: 'text', handler: () => dispatch('add', '6') },
@@ -36,7 +36,7 @@
     <button
       class={`keyboard__btn keyboard__btn_${button.color}`}
       class:keyboard__btn_round={button.round}
-      on:click={button.handler}
+      on:touchend={button.handler}
     >
       {button.text}
     </button>
@@ -57,8 +57,8 @@
     padding: 0
     border: none
     background-color: transparent
-    aspect-ratio: 1 / 1
     font-size: 26px
+    padding: 10px
 
     &_bg
       +color($c-light-bg, $c-dark-bg)
@@ -74,5 +74,6 @@
 
     &_round
       border-radius: 50%
+      aspect-ratio: 1 / 1
       +backgroundColor($c-light-accent, $c-dark-accent)
 </style>

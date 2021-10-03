@@ -11,6 +11,8 @@
 <script lang="ts">
   import Keyboard from './keyboard.svelte';
   import ThemeChanger from './theme-changer.svelte';
+	import ResultDisplay from './result-display.svelte';
+	import QueryDisplay from './query-display.svelte';
 
   let result: number = 0;
 	let compiled: CompiledOperator = null;
@@ -41,20 +43,11 @@
   </div>
 
   <div class="calculator__result">
-    {result}
+    <ResultDisplay result={result} />
   </div>
 
   <div class="calculator__query">
-		{query}
-    <!-- 50
-    <span class="calculator__query__operator"> - </span>
-    10
-    <span class="calculator__query__operator"> - </span>
-    10
-    <span class="calculator__query__operator"> - </span>
-    10
-    <span class="calculator__query__operator"> + </span>
-    100 -->
+		<QueryDisplay query={query} />
   </div>
 
   <div class="calculator__keyboard">
@@ -71,13 +64,14 @@
 	$max-width: 414px
 	$max-height: 800px
 
+	position: relative
 	min-width: 320px
 	max-width: $max-width
 	width: 100%
 	max-height: $max-height
 	height: 100%
 	flex-grow: 1
-	padding: 60px 40px
+	padding: 40px 60px
 	border-radius: 15px
 	display: flex
 	flex-direction: column
@@ -87,6 +81,7 @@
 
 	@media (max-width: $max-width)
 		border-radius: 0
+		padding: 25px
 
 	@media screen and (orientation: landscape) and (max-height: 500px)
 		max-width: $max-height
@@ -95,20 +90,8 @@
 		@media (max-width: $max-height)
 			border-radius: 0
 
-	&__result
-		text-align: right
-		font-size: 90px
-		line-height: 1.25
-		+color($c-light-text, $c-dark-text)
-
-	&__query
-		text-align: right
-		font-size: 22px
-		line-height: 1.25
-		+color($c-light-accent, $c-dark-accent)
-
-		&__operator
-			+color($c-light-text, $c-dark-text)
+	&__settings
+		position: absolute
 
 	&__keyboard
 		margin-top: auto
