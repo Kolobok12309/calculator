@@ -1,7 +1,12 @@
 <script lang="ts">
   export let query = '';
 
-  $: htmlQuery = query.replace(/\d+/g, '<span class="display__num">$&</span>');
+  const template = (className: string, content: string = '') =>
+    `<span class="display__${className}">${content}</span>`;
+
+  $: htmlQuery = query
+    .replace(/ +/g, template('space'))
+    .replace(/\d+/g, v => template('num', v));
 </script>
 
 <div class="display">
@@ -21,4 +26,7 @@
 
   :global(.display__num)
     +color($c-light-accent, $c-dark-accent)
+
+  :global(.display__space)
+    margin-left: 10px
 </style>

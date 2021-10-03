@@ -21,6 +21,9 @@
 	const onAddSymbol = ({ detail }) => {
 		query += detail;
 	}
+	const onBackspace = () => {
+		query = query.slice(0, -1);
+	}
 	const onReset = () => {
 		query = '';
 		result = 0;
@@ -47,12 +50,13 @@
   </div>
 
   <div class="calculator__query">
-		<QueryDisplay query={query} />
+		<QueryDisplay	query={query} />
   </div>
 
   <div class="calculator__keyboard">
     <Keyboard
 			on:add={onAddSymbol}
+			on:backspace={onBackspace}
 			on:reset={onReset}
 			on:submit={onSubmit}
 		/>

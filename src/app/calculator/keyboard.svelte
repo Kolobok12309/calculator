@@ -6,8 +6,8 @@
   const buttons = [
     { text: 'C', color: 'red', handler: () => dispatch('reset') },
     { text: 'CA', color: 'red', handler: () => dispatch('reset') },
-    { text: '', color: 'red', handler: () => {} },
-    { text: '', color: 'red', handler: () => {} },
+    { text: '←', color: 'red', handler: () => dispatch('backspace') },
+    { text: '_', color: 'red', handler: () => dispatch('add', ' ') },
     { text: '(', color: 'accent', handler: () => dispatch('add', '(') },
     { text: ')', color: 'accent', handler: () => dispatch('add', ')') },
     { text: '!', color: 'accent', handler: () => dispatch('add', '!') },
@@ -36,7 +36,7 @@
     <button
       class={`keyboard__btn keyboard__btn_${button.color}`}
       class:keyboard__btn_round={button.round}
-      on:touchend={button.handler}
+      on:click={button.handler}
     >
       {button.text}
     </button>
