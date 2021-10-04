@@ -1,4 +1,4 @@
-import { Operator, EmptyOperator, PlusOperator, MulOperator } from './operators';
+import { Operator, EmptyOperator, PlusOperator, MulOperator, PowOperator } from './operators';
 import CompiledOperator from './compiled-operator';
 
 describe('CompiledOperator', () => {
@@ -56,6 +56,14 @@ describe('CompiledOperator', () => {
         expect(mainOperator.view(-2)).toEqual('4 * 4');
         expect(mainOperator.view(2)).toEqual('2 * 2 * (2 + 2)');
         expect(mainOperator.view(-1)).toEqual('2 * 2 * (2 + 2)');
+      });
+
+      it('Brackets for the same priority operators', () => {
+        const operator1 = new CompiledOperator(MulOperator, 1, 3);
+
+        const mainOperator = new CompiledOperator(PowOperator, 2, operator1);
+
+        expect(mainOperator.view(-1)).toEqual('2^(1 * 3)');
       });
     });
   });

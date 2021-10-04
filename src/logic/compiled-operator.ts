@@ -55,7 +55,8 @@ export default class CompiledOperator {
     if (depth === 0) return `${this.exec()}`;
 
     if (this.v2 instanceof CompiledOperator) {
-      const isNeedBrackets = this.v2.operator.priority < this.operator.priority;
+      const isNeedBrackets = this.v2.operator !== this.operator
+        && this.v2.operator.priority <= this.operator.priority;
       const view = this.v2.view(depth - 1);
 
       return isNeedBrackets && depth > 1

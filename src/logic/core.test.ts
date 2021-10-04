@@ -1,3 +1,4 @@
+import CompiledOperator from './compiled-operator';
 import { Calculator } from './core';
 import { PlusOperator, MulOperator } from './operators';
 
@@ -11,7 +12,32 @@ describe('Calculator', () => {
   });
 
   describe('Compile', () => {
+    it('Exact result after view(-1)', () => {
+      const calculator = new Calculator();
+      const cases = [
+        '4 * 7 + 5 + 1 + 3',
+        '2 * 2 * (2 + 2)',
+        '2^(1 * 3)',
+        '(2+2)-2',
+        '(2 + ((3 + 2) * 2!)) * -1',
+        '-11+-12',
+        '-5(2 + 2!)',
+        '(2+2)*-5',
+        '(2+2)-2',
+        '(2+2)2',
+        '2++2',
+        '(2 + 2) * (2 - 2)'
+      ];
 
+      cases.forEach((calcString) => {
+        const compiled = calculator.compile(calcString);
+        const res = compiled.exec();
+        const view = compiled.view(-1);
+
+        expect(compiled).toBeInstanceOf(CompiledOperator);
+        expect(calculator.calc(view)).toEqual(res);
+      });
+    });
   });
 
   describe('Calc', () => {
