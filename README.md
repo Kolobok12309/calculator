@@ -25,6 +25,8 @@ During parsing can be added `Mul` operators or set sign of numbers.
 
 ## Try it
 
+[Demo](https://kolobok12309.github.io/calculator/)
+
 `window.calc` is instance of `Calculator` with default options.
 
 `window.Calculator` is `Calculator`.
