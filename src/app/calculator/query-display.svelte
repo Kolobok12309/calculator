@@ -24,6 +24,11 @@
   text-overflow: ellipsis
   +color($c-light-text, $c-dark-text)
 
+  @include landscape
+    @media (max-height: 340px)
+      font-size: 20px
+      line-height: 1
+
   :global(.display__num)
     +color($c-light-accent, $c-dark-accent)
 

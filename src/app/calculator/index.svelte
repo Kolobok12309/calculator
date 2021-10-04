@@ -1,43 +1,43 @@
 <script
-	lang="ts"
-	context="module"
+  lang="ts"
+  context="module"
 >
-	import { Calculator } from '@/logic';
-	import type CompiledOperator from '@/logic/compiled-operator';
+  import { Calculator } from '@/logic';
+  import type CompiledOperator from '@/logic/compiled-operator';
 
-	const calculator = new Calculator();
+  const calculator = new Calculator();
 </script>
 
 <script lang="ts">
   import Keyboard from './keyboard.svelte';
   import ThemeChanger from './theme-changer.svelte';
-	import ResultDisplay from './result-display.svelte';
-	import QueryDisplay from './query-display.svelte';
+  import ResultDisplay from './result-display.svelte';
+  import QueryDisplay from './query-display.svelte';
 
   let result: number = 0;
-	let compiled: CompiledOperator = null;
-	let query: string = '';
+  let compiled: CompiledOperator = null;
+  let query: string = '';
 
-	const onAddSymbol = ({ detail }) => {
-		query += detail;
-	}
-	const onBackspace = () => {
-		query = query.slice(0, -1);
-	}
-	const onReset = () => {
-		query = '';
-		result = 0;
-		compiled = null;
-	}
-	const onSubmit = () => {
-		try {
-			compiled = calculator.compile(query);
-			result = compiled.exec();
-			query = compiled.view(-1);
-		} catch (err) {
-			console.error(err);
-		}
-	}
+  const onAddSymbol = ({ detail }) => {
+    query += detail;
+  }
+  const onBackspace = () => {
+    query = query.slice(0, -1);
+  }
+  const onReset = () => {
+    query = '';
+    result = 0;
+    compiled = null;
+  }
+  const onSubmit = () => {
+    try {
+      compiled = calculator.compile(query);
+      result = compiled.exec();
+      query = compiled.view(-1);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 </script>
 
 <main class="calculator">
@@ -50,53 +50,56 @@
   </div>
 
   <div class="calculator__query">
-		<QueryDisplay	query={query} />
+    <QueryDisplay query={query} />
   </div>
 
   <div class="calculator__keyboard">
     <Keyboard
-			on:add={onAddSymbol}
-			on:backspace={onBackspace}
-			on:reset={onReset}
-			on:submit={onSubmit}
-		/>
+      on:add={onAddSymbol}
+      on:backspace={onBackspace}
+      on:reset={onReset}
+      on:submit={onSubmit}
+    />
   </div>
 </main>
 
 <style lang="sass">
 .calculator
-	$max-width: 414px
-	$max-height: 800px
+  position: relative
+  min-width: 320px
+  max-width: $max-width
+  width: 100%
+  max-height: $max-height
+  height: 100%
+  flex-grow: 1
+  padding: 40px 60px
+  border-radius: 15px
+  display: flex
+  flex-direction: column
 
-	position: relative
-	min-width: 320px
-	max-width: $max-width
-	width: 100%
-	max-height: $max-height
-	height: 100%
-	flex-grow: 1
-	padding: 40px 60px
-	border-radius: 15px
-	display: flex
-	flex-direction: column
+  +backgroundColor($c-light-bg, $c-dark-bg)
+  +color($c-light-text, $c-dark-text)
 
-	+backgroundColor($c-light-bg, $c-dark-bg)
-	+color($c-light-text, $c-dark-text)
+  @media (max-width: $max-width)
+    max-height: unset
+    border-radius: 0
+    padding: 25px
 
-	@media (max-width: $max-width)
-		border-radius: 0
-		padding: 25px
+  @include landscape
+    max-width: unset
+    max-height: $max-width
 
-	@media screen and (orientation: landscape) and (max-height: 500px)
-		max-width: $max-height
-		max-height: $max-width
+    @media (max-width: $max-height)
+      border-radius: 0
+      padding: 5px
 
-		@media (max-width: $max-height)
-			border-radius: 0
+  &__settings
+    position: absolute
 
-	&__settings
-		position: absolute
+  &__keyboard
+    margin-top: auto
 
-	&__keyboard
-		margin-top: auto
+    @include landscape
+      margin-top: unset
+      flex-grow: 1
 </style>

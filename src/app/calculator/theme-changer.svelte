@@ -51,4 +51,13 @@
     cursor: pointer
     width: $size
     height: $size
+
+  @include landscape
+    $size: 20px
+
+    &__icon,
+    &__select
+      font-size: $size
+      width: $size
+      height: $size
 </style>

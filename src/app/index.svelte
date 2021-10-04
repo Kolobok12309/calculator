@@ -14,17 +14,18 @@
 
 <style lang="sass">
 :global(html,body)
-	height: 100%
-	font-family: $font-family
-	touch-action: none
+  height: 100%
+  font-family: $font-family
+  touch-action: none
 
 :global(*)
-	box-sizing: border-box
+  box-sizing: border-box
 
 .container
-	width: 100%
-	height: 100%
-	display: flex
-	align-items: center
-	justify-content: center
+  width: 100vw
+  height: 100vh
+  overflow: hidden
+  display: flex
+  align-items: center
+  justify-content: center
 </style>
